@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TcfOss.DataStructures/TcfOss.DataStructures.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/TcfOss.DataStructures.Tests/TcfOss.DataStructures.Tests.csproj" />
+  </Folder>
+</Solution>

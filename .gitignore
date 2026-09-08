@@ -1,0 +1,6 @@
+bin/
+obj/
+nupkg/
+
+[Tt]est-[Rr]esult*/
+[Cc]overage-[Hh]istory/

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>TcfOss.DataStructures</PackageId>
+    <Description>Common data structures used across projects.</Description>
+    <Authors>Thomas C. Flanagan</Authors>
+    <PackageTags>data-structures;collections;value-collections</PackageTags>
+  </PropertyGroup>
+
+</Project>
