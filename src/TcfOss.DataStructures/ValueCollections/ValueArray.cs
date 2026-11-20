@@ -8,13 +8,20 @@ namespace TcfOss.DataStructures.ValueCollections;
 /// An immutable, equatable array. This is equivalent to <see cref="Array"/> but with value equality support.
 /// </summary>
 /// <typeparam name="T">The type of values in the array.</typeparam>
-public readonly struct ValueArray<T>(T[] array) : IEquatable<ValueArray<T>>, IEnumerable<T>
+public readonly struct ValueArray<T> : IEquatable<ValueArray<T>>, IEnumerable<T>
     where T : IEquatable<T>
 {
-    public ValueArray(IEnumerable<T> items) : this([.. items])
-    { }
+    private readonly T[]? _array;
 
-    private readonly T[]? _array = array;
+    public ValueArray(IEnumerable<T>? items)
+    {
+        _array = items is not null ? [.. items] : null;
+    }
+
+    public ValueArray(T[]? array)
+    {
+        _array = array is not null ? [.. array] : null;
+    }
 
     /// <summary>
     /// Gets the length of the array, or 0 if the array is null
@@ -58,7 +65,7 @@ public readonly struct ValueArray<T>(T[] array) : IEquatable<ValueArray<T>>, IEn
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        if (_array is not T[] array)
+        if (_array is not { Length: > 0 } array)
         {
             return 0;
         }
@@ -80,15 +87,6 @@ public readonly struct ValueArray<T>(T[] array) : IEquatable<ValueArray<T>>, IEn
     public ReadOnlySpan<T> AsSpan()
     {
         return _array.AsSpan();
-    }
-
-    /// <summary>
-    /// Returns the underlying wrapped array.
-    /// </summary>
-    /// <returns>Returns the underlying array.</returns>
-    public T[]? AsArray()
-    {
-        return _array;
     }
 
     public T this[int index]
