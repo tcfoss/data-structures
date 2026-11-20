@@ -1,7 +1,7 @@
 namespace TcfOss.DataStructures.ValueCollections;
 
 public sealed class ValueDict<TKey, TVal> : Dictionary<TKey, TVal>, ICloneable, IEquatable<ValueDict<TKey, TVal>>
-    where TKey : notnull, IEquatable<TKey>
+    where TKey : IEquatable<TKey>
     where TVal : IEquatable<TVal>
 {
     public ValueDict()

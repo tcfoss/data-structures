@@ -77,28 +77,6 @@ public class ValueArrayTests
     }
 
     [Fact]
-    public void ExtractArray()
-    {
-        int[] sourceArray = [1, 2, 3, 4, 5];
-        var arr = new ValueArray<int>(sourceArray);
-
-        int[]? extractedArray = arr.AsArray();
-
-        Assert.Equal(sourceArray, extractedArray);
-        Assert.Same(sourceArray, extractedArray);
-
-        Assert.Equal(arr, extractedArray);
-#pragma warning disable xUnit2005 // Do not use identity check on value type
-        Assert.NotSame(arr, extractedArray);
-#pragma warning restore xUnit2005 // Do not use identity check on value type
-
-        foreach ((int first, int second) in arr.Zip(sourceArray))
-        {
-            Assert.Equal(first, second);
-        }
-    }
-
-    [Fact]
     public void Enumerate()
     {
         int[] sourceArray = [1, 2, 3, 4, 5];
@@ -125,7 +103,7 @@ public class ValueArrayTests
         var arr = new ValueArray<int>(null!);
 
         int index = 0;
-        foreach (int item in arr)
+        foreach (int _ in arr)
         {
             index++;
         }
@@ -133,7 +111,7 @@ public class ValueArrayTests
         Assert.Equal(0, index);
 
         index = 0;
-        foreach (object? item in (IEnumerable)arr)
+        foreach (object? _ in (IEnumerable)arr)
         {
             index++;
         }
@@ -154,10 +132,79 @@ public class ValueArrayTests
     }
 
     [Fact]
+    public void DefaultAndEmptyAreEqual()
+    {
+        ValueArray<int> defaultArray = default;
+        ValueArray<int> emptyArray1 = [];
+        ValueArray<int> emptyArray2 = new([]);
+
+        Assert.Equal(defaultArray, emptyArray1);
+        Assert.Equal(defaultArray.GetHashCode(), emptyArray1.GetHashCode());
+        Assert.Equal(defaultArray, emptyArray2);
+        Assert.Equal(defaultArray.GetHashCode(), emptyArray2.GetHashCode());
+
+        Assert.True(defaultArray == emptyArray1);
+        Assert.True(defaultArray == emptyArray2);
+
+        HashSet<ValueArray<int>> set =
+        [
+            defaultArray,
+            emptyArray1,
+            emptyArray2
+        ];
+        Assert.Single(set);
+    }
+
+    [Fact]
+    public void SourceNullAndEmptyAreEqual()
+    {
+        ValueArray<int> nullArray = new(null);
+        ValueArray<int> nullIEnumerableArray = new((IEnumerable<int>?)null);
+        ValueArray<int> emptyArray = new([]);
+
+        Assert.Equal(nullArray, emptyArray);
+        Assert.Equal(nullArray.GetHashCode(), emptyArray.GetHashCode());
+        Assert.True(nullArray == emptyArray);
+
+        Assert.Equal(nullIEnumerableArray, emptyArray);
+        Assert.Equal(nullIEnumerableArray.GetHashCode(), emptyArray.GetHashCode());
+        Assert.True(nullIEnumerableArray == emptyArray);
+    }
+
+    [Fact]
     public void EqualsNullOrDifferentTypeReturnsFalse()
     {
         var arr = new ValueArray<int>([1, 2, 3]);
         Assert.False(arr.Equals(null));
+        // ReSharper disable once SuspiciousTypeConversion.Global
         Assert.False(arr.Equals("string"));
+    }
+
+    [Fact]
+    public void NullableNullAndEmptyAreDifferent()
+    {
+        ValueArray<int>? nullableNull = null;
+        ValueArray<int>? nullableEmpty = [];
+
+        Assert.NotEqual(nullableNull, nullableEmpty);
+        Assert.False(nullableNull == nullableEmpty);
+        Assert.NotEqual(nullableEmpty.GetHashCode(), nullableNull?.GetHashCode());
+
+        HashSet<ValueArray<int>?> set =
+        [
+            nullableNull,
+            nullableEmpty
+        ];
+        Assert.Equal(2, set.Count);
+    }
+
+    [Fact]
+    public void ArrayIsImmutable()
+    {
+        int[] sourceArray = [1, 2, 3];
+        var arr = new ValueArray<int>(sourceArray);
+
+        sourceArray[0] = 42;
+        Assert.Equal(1, arr[0]);
     }
 }

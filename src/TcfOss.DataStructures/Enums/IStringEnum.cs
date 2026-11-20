@@ -5,6 +5,7 @@ namespace TcfOss.DataStructures.Enums;
 
 #pragma warning disable CA1711 // Suffix 'Enum' is by design
 
+
 public interface IStringEnum<T> : IEquatable<T>
 {
     static abstract ValueArray<string> AllowedValues { get; }

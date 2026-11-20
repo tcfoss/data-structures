@@ -41,7 +41,7 @@ public class ValueList<T> : List<T>, ICloneable, IEquatable<ValueList<T>>
     public override int GetHashCode()
     {
         var hash = new HashCode();
-        foreach (T? item in this)
+        foreach (T item in this)
         {
             hash.Add(item);
         }
@@ -51,9 +51,9 @@ public class ValueList<T> : List<T>, ICloneable, IEquatable<ValueList<T>>
     public ValueList<T> Clone()
     {
         var clone = new ValueList<T>();
-        foreach (T? item in this)
+        foreach (T item in this)
         {
-            T? newItem = item switch
+            T newItem = item switch
             {
                 ICloneable cloneable => (T)cloneable.Clone(),
                 _ => item
